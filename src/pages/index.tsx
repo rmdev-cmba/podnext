@@ -1,5 +1,5 @@
 import { GetStaticProps } from 'next';
-import { type } from 'node:os';
+import { api } from '../service/api';
 
 type Episode = {
   id: string;
@@ -26,8 +26,14 @@ export default function Home(props: HomeProps) {
 // SSG - Server Side Generation - Este recurso só funciona em produção (build)
 // nesta chamada a página é pré montada, já fica pronta esperando a chamada, muito utilizado em api's que não sofre alteração constante em seus dados.
 export const getStaticProps: GetStaticProps = async () => {
-  const response = await fetch('http://localhost:3333/episodes') // busca todos os dados disponibilizado por esta consulta
-  const data = await response.json()
+  const { data } = await api.get('episodes', {
+    params: {
+      _limit:12,
+      _sort: 'published_at',
+      _order: 'desc'
+    }
+  })  // busca todos os dados disponibilizado por esta consulta
+
 
   return {
     props: {
