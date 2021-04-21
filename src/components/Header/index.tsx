@@ -1,6 +1,12 @@
-import s from './style.module.scss';
+import format from 'date-fns/format';
+import ptBR from 'date-fns/locale/pt-BR';
+
+import s from './Header.module.scss';
 
 export function Header(){
+    const currentDate = format(new Date(), 'EEEEEE, d MMMM', {
+        locale: ptBR,
+    });
     
     return(
         <header className={s.container}>
@@ -8,7 +14,7 @@ export function Header(){
 
             <p>O melhor pra você ouvir, sempre</p>
 
-            <span>qua, 21 abril</span>
+            <span>{currentDate}</span>
             
         </header>
     )

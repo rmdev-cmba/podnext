@@ -1,0 +1,98 @@
+.container {
+    padding:  3rem 4rem;
+    width: 26.5rem;
+    height: 100vh;
+
+    background: var(--purple-500);
+    color: var(--white);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; // centraliza o conteudo em espaços iguais
+
+    header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    strong {
+        font-family: Lexend, sans-serif;
+        font-weight: 600;
+    }
+
+    footer {
+        align-self: stretch; // ocupa a largura toda do footer
+
+        &.empty {
+            // quando conter a estilização 'empty'
+            opacity: 0.5;
+        }
+    }
+    
+}
+
+.emptyPlayer {
+    // define um espaço dentro do player
+    width: 100%;
+    height: 20rem;
+    border: 1.5px dashed var(--purple-300); // dashed traceja o campo vazio
+    border-radius: 1.5rem; // arredonda os cantos
+    background: linear-gradient(143.8deg, rgba(145, 100, 250, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+
+    padding: 4rem; // define uma borda interna
+    text-align: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.progress {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875;
+    
+    span {
+        display: inline-block;
+        width: 4rem;
+        text-align: center;
+    }
+
+    .slider {
+        flex: 1; // ocupa o máximo de espaço possível e seja flexível
+
+        .emptySlider {
+            width: 100%;
+            height: 4px;
+            background: var(--purple-300);
+            border-radius: 2px;
+        }
+    }
+
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2.5rem;
+    gap: 1.5rem;
+
+    button {
+        background: transparent;
+        border: 0;
+        font-size: 0; // reseta o tamanho da fonte no button, para centralizar imagem, pois não é fonte.
+
+        &.playButton {
+            // se contém 'playButton'
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1rem;
+            background: var(--purple-400);
+        }
+    }
+}
