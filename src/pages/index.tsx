@@ -14,7 +14,6 @@ type Episode = {
   members: string;
   thumbnail: string;
   publishedAt: string;
-  description: string;
   duration: number;
   durationAsString: string;
   url: string;
@@ -22,8 +21,8 @@ type Episode = {
 }
 
 type HomeProps = {
-  latestEpisodes: Episode[];
-  allEpisodes: Episode[];
+  latestEpisodes: Episode[]; // tipado que recebe um array
+  allEpisodes: Episode[]; // tipado que recebe um array
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
@@ -136,7 +135,6 @@ export const getStaticProps: GetStaticProps = async () => {
       publishedAt: format(parseISO(episode.published_at), 'd MMM yy', { locale: ptBR }), // formatado
       duration: Number(episode.file.duration), // formatado para numero
       durationAsString: convertDurationToTimeString(Number(episode.file.duration)),
-      description: episode.description, // sem formatação
       url: episode.file.url // sem formatação
     }
   })

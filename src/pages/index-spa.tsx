@@ -15,3 +15,5 @@ export default function Home() {
 };
 
 // este modelo de chamada só carrega os dados no momento da chamada.
+// os hooks do React só pode ser usado dentro de componentes
+
