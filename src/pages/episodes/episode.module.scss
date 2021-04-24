@@ -1,5 +1,5 @@
 .episode {
-    max-width: 45rem; // alrgura m´xima da página
+    max-width: 45rem; // largura máxima da página
     padding: 3rem 2rem;
     margin: 0 auto;
 
@@ -42,4 +42,48 @@
         }
     }
 
+    header {
+        padding-bottom: 1rem; // definição do início do header
+        border-bottom: 1px solid var(--gray-100); // criação de uma linha na cor informada
+
+        h1 {
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        span {
+            display: inline-block;
+            font-size: 0.875rem;
+
+            & + span {
+                // todo 'span' exceto o primeiro
+                margin-left: 1rem;
+                padding-left: 1rem;
+                position: relative;
+
+                &::before {
+                    // colocar um elemento entre os spans que ficará após o primeiro 'after' e 'before' antes do último
+                    content: "";
+                    width: 4px;
+                    height: 4px;
+                    border-radius: 2px;
+                    background: #ddd;
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    transform: translate(-50%, -50%); // complementa a centralização da 'bolinha'
+                }
+            }
+        }
+    }
+
+    .description {
+        margin-top: 2rem; // centralização do texto
+        line-height: 1.675rem; // espaço entre as linhas
+        color: var(--gray-800); // cor da fonte
+
+        p {
+            margin: 1.5rem 0; // espaço entre os parágrafos
+        }
+    }
 }
