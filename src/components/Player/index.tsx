@@ -1,20 +1,43 @@
-
+import Image from 'next/image';
+import { useContext } from 'react';
+import { PlayerContext } from '../../contexts/PlayerContext';
 import s from './Player.module.scss';
 
 export function Player() {
+    // funcao useContext para fazer algo funcionar em varios componentes distintos
+    const { episodeList, currentEpisodeIndex } = useContext(PlayerContext)
+
+    // buscando o episode que será tocado
+    const episode = episodeList[currentEpisodeIndex]
 
     return (
         <div className={s.container}>
             <header>
                 <img src="/playing.svg" alt="Tocando agora" />
-                <strong>Tocando agora</strong>
+                <strong>Tocando agora {episode?.title}</strong>
             </header>
 
-            <div className={s.emptyPlayer}>
-                <strong>Selecione um podcast para ouvir</strong>
-            </div>
+            { episode ? (
+                <div className={s.currentEpisode}>
+                    <Image
+                     width={592}
+                     height={592}
+                     src={episode.thumbnail}
+                     objectFit="cover"
+                     />
+                     <strong>{episode.title}</strong>
+                     <span>{episode.members}</span>
 
-            <footer className={s.empty}>
+                </div>
+            ) : (
+                <div className={s.emptyPlayer}>
+                    <strong>Selecione um podcast para ouvir</strong>
+                </div>
+            )}
+
+
+
+            <footer className={!episode ? s.empty : ''}> {/* '!episode ? x ; y' se não houver episódio então x senão y*/}
                 <div className={s.progress}>
                     <span>00:00</span>
                     <div className={s.slider}>

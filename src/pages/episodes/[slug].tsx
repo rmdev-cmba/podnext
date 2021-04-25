@@ -26,7 +26,7 @@ type EpisodeProps = {
 };
 
 export default function Episode({ episode }: EpisodeProps) {
-    
+
     // código que serve somente se o 'fallback' for true
     const router = useRouter();
     if (router.isFallback) {
@@ -130,3 +130,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
                                   // não atualiza antes
     }
 }
+
+
+// https://www.youtube.com/watch?v=cRs3jdGbOt0 (24:00)

@@ -1,6 +1,8 @@
+import { useContext } from 'react';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { PlayerContext } from '../contexts/PlayerContext';
 import { api } from '../service/api';
 import { format, parseISO } from 'date-fns';
 // parseISO converte uma 'string data' na data correspondente
@@ -26,12 +28,13 @@ type HomeProps = {
 }
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
+  // funcao useContext para fazer algo funcionar em varios componentes distintos
+  const { play } = useContext(PlayerContext)
   // formatação de dados: para melhor performance fazer a formatação fora do return
-
   return (
     <div className={s.homepage}>
       <section className={s.latestEpisodes}>
-        <h2>Últimos Lançamentos</h2>
+        <h2>Últimos Lançamentos </h2>
 
         <ul>
           {latestEpisodes.map(episode => {
@@ -53,7 +56,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   <span>{episode.durationAsString}</span>
                 </div>
 
-                <button type="button">
+                <button type="button" onClick={() => play(episode)}> {/* uma função de retorno void tem que ser chamada por outra função */}
                   <img src="/play-green.svg" alt="Tocar episódio" />
                 </button>
               </li>
