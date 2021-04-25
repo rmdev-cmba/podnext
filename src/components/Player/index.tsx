@@ -1,5 +1,9 @@
 import Image from 'next/image';
 import { useContext } from 'react';
+// importacao do pacote slider para gerar a barra de indicação tempo no player
+import Slider from 'rc-slider';
+// importando o css próprio do rc-slider
+import 'rc-slider/assets/index.css';
 import { PlayerContext } from '../../contexts/PlayerContext';
 import s from './Player.module.scss';
 
@@ -41,24 +45,33 @@ export function Player() {
                 <div className={s.progress}>
                     <span>00:00</span>
                     <div className={s.slider}>
-                        <div className={s.emptySlider} />
+                        { episode ? (
+                            <Slider 
+                                trackStyle={{ backgroundColor: '#04d361' }}
+                                railStyle={{ backgroundColor: '#9f75ff' }}
+                                handleStyle={{ borderColor: '#04d361', borderWidth: 4 }}
+                            />
+                        ) : (
+                            <div className={s.emptySlider} />
+                        ) }
                     </div>
                     <span>00:00</span>
                 </div>
+
                 <div className={s.buttons}>
-                    <button type="button">
+                    <button type="button" disabled={!episode}>
                         <img src="/shuffle.svg" alt="Embaralhar" />
                     </button>
-                    <button type="button">
+                    <button type="button" disabled={!episode}>
                         <img src="/play-previous.svg" alt="Tocar anterior" />
                     </button>
-                    <button type="button" className={s.playButton}>
+                    <button type="button" className={s.playButton} disabled={!episode}>
                         <img src="/play.svg" alt="Tocar" />
                     </button>
-                    <button type="button" >
+                    <button type="button" disabled={!episode}>
                         <img src="/play-next.svg" alt="Tocar próxima" />
                     </button>
-                    <button type="button" >
+                    <button type="button" disabled={!episode}>
                         <img src="/repeat.svg" alt="Repetir" />
                     </button>
                 </div>
