@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 // importacao do pacote slider para gerar a barra de indicação tempo no player
 import Slider from 'rc-slider';
 // importando o css próprio do rc-slider
@@ -8,8 +8,24 @@ import { PlayerContext } from '../../contexts/PlayerContext';
 import s from './Player.module.scss';
 
 export function Player() {
+    // criando uma referencia para controlar a tag audio do html
+    const audioRef = useRef<HTMLAudioElement>(null); // usa-se 'useRef' do react tipando com HTMLAudioElement com valor inicial null
+
     // funcao useContext para fazer algo funcionar em varios componentes distintos
-    const { episodeList, currentEpisodeIndex } = useContext(PlayerContext)
+    const { episodeList, currentEpisodeIndex, isPlaying, togglePlay } = useContext(PlayerContext)
+
+    // após ativado o audioRef será criado useEffet para ele fazer a mudança assim que algo mudar no audio
+    useEffect(() => {
+        if (!audioRef.current) { // os dados não fica em audioRef e sim em 'current' que vem do useRef do react
+            return; // se não tem dados então não executa nada
+        }
+
+        if (isPlaying) {
+            audioRef.current.play();
+        }else{
+            audioRef.current.pause();
+        }
+    }, [isPlaying]); // toda vez que 'isPlaying' for alterado
 
     // buscando o episode que será tocado
     const episode = episodeList[currentEpisodeIndex]
@@ -24,13 +40,13 @@ export function Player() {
             { episode ? (
                 <div className={s.currentEpisode}>
                     <Image
-                     width={592}
-                     height={592}
-                     src={episode.thumbnail}
-                     objectFit="cover"
-                     />
-                     <strong>{episode.title}</strong>
-                     <span>{episode.members}</span>
+                        width={592}
+                        height={592}
+                        src={episode.thumbnail}
+                        objectFit="cover"
+                    />
+                    <strong>{episode.title}</strong>
+                    <span>{episode.members}</span>
 
                 </div>
             ) : (
@@ -45,18 +61,26 @@ export function Player() {
                 <div className={s.progress}>
                     <span>00:00</span>
                     <div className={s.slider}>
-                        { episode ? (
-                            <Slider 
+                        {episode ? (
+                            <Slider
                                 trackStyle={{ backgroundColor: '#04d361' }}
                                 railStyle={{ backgroundColor: '#9f75ff' }}
                                 handleStyle={{ borderColor: '#04d361', borderWidth: 4 }}
                             />
                         ) : (
                             <div className={s.emptySlider} />
-                        ) }
+                        )}
                     </div>
                     <span>00:00</span>
                 </div>
+
+                {episode && ( // se usa '&&' pois este if não contém o senão (else), usa-se '||' para fazer ao contrário
+                    <audio
+                        src={episode.url}
+                        ref={audioRef}
+                        autoPlay
+                    />
+                )}
 
                 <div className={s.buttons}>
                     <button type="button" disabled={!episode}>
@@ -65,8 +89,11 @@ export function Player() {
                     <button type="button" disabled={!episode}>
                         <img src="/play-previous.svg" alt="Tocar anterior" />
                     </button>
-                    <button type="button" className={s.playButton} disabled={!episode}>
-                        <img src="/play.svg" alt="Tocar" />
+                    <button type="button" className={s.playButton} disabled={!episode} onClick={togglePlay}>
+                        { isPlaying 
+                            ? <img src="/pause.svg" alt="Pause" />
+                            : <img src="/play.svg" alt="Tocar" /> }
+
                     </button>
                     <button type="button" disabled={!episode}>
                         <img src="/play-next.svg" alt="Tocar próxima" />
@@ -81,3 +108,4 @@ export function Player() {
     );
 
 }
+

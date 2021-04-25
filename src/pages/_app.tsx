@@ -8,16 +8,23 @@ import s from '../styles/app.module.scss';
 
 function MyApp({ Component, pageProps }) {
   // criando uma função para mudar os dado de episodeList
-  const [episodeList, setEpisodeList]= useState([]); // esta variável será repassado no objeto PlayerContext.Provider
+  const [episodeList, setEpisodeList] = useState([]); // esta variável será repassado no objeto PlayerContext.Provider
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0); // esta variável será repassado no objeto PlayerContext.Provider
+  const [isPlaying, setIsPlaying] = useState(false);
 
   function play(episode) {
     setEpisodeList([episode]);
     setCurrentEpisodeIndex(0);
+    setIsPlaying(true); 
+  }
+
+  // funcção pause/play
+  function togglePlay() {
+    setIsPlaying(!isPlaying);
   }
 
   return (
-    <PlayerContext.Provider value={{ episodeList, currentEpisodeIndex, play }}> 
+    <PlayerContext.Provider value={{ episodeList, currentEpisodeIndex, play, isPlaying, togglePlay }}> 
       <div className={s.wrapper}>
         <main>
           <Header />

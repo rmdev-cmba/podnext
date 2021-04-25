@@ -56,7 +56,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   <span>{episode.durationAsString}</span>
                 </div>
 
-                <button type="button" onClick={() => play(episode)}> {/* uma função de retorno void tem que ser chamada por outra função */}
+                <button type="button" onClick={() => play(episode)}> {/* uma função que contém parãmetros tem que ser chamada por outra função */}
                   <img src="/play-green.svg" alt="Tocar episódio" />
                 </button>
               </li>
