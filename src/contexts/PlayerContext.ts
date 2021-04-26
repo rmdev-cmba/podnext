@@ -15,7 +15,9 @@ type PlayerContextData = {
     currentEpisodeIndex: number; // índice para apontar em qual posição do array está tocando atualmente
     play: (episode: Episode) => void;
     isPlaying: boolean;
+    setPlayingState: (state: boolean) => void;
     togglePlay: () => void;
+    
 }
 export const PlayerContext = createContext({} as PlayerContextData); // os parâmetros aqui não é o que será carregado aos componentes, mas informa com quais tipos de parâmetros será trablhado, recebidos
 // está sendo informado que trablhará com objetos com a tipagem informada

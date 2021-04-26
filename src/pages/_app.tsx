@@ -18,13 +18,18 @@ function MyApp({ Component, pageProps }) {
     setIsPlaying(true); 
   }
 
-  // funcção pause/play
+  // funcção pause/play quando clica no botão
   function togglePlay() {
     setIsPlaying(!isPlaying);
   }
 
+  // função para pause/play no teclado
+  function setPlayingState(state: boolean) {
+    setIsPlaying(state);
+  }
+
   return (
-    <PlayerContext.Provider value={{ episodeList, currentEpisodeIndex, play, isPlaying, togglePlay }}> 
+    <PlayerContext.Provider value={{ episodeList, currentEpisodeIndex, play, isPlaying, togglePlay, setPlayingState }}> 
       <div className={s.wrapper}>
         <main>
           <Header />
@@ -38,3 +43,4 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp
+

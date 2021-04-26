@@ -12,7 +12,7 @@ export function Player() {
     const audioRef = useRef<HTMLAudioElement>(null); // usa-se 'useRef' do react tipando com HTMLAudioElement com valor inicial null
 
     // funcao useContext para fazer algo funcionar em varios componentes distintos
-    const { episodeList, currentEpisodeIndex, isPlaying, togglePlay } = useContext(PlayerContext)
+    const { episodeList, currentEpisodeIndex, isPlaying, togglePlay, setPlayingState } = useContext(PlayerContext)
 
     // após ativado o audioRef será criado useEffet para ele fazer a mudança assim que algo mudar no audio
     useEffect(() => {
@@ -55,8 +55,6 @@ export function Player() {
                 </div>
             )}
 
-
-
             <footer className={!episode ? s.empty : ''}> {/* '!episode ? x ; y' se não houver episódio então x senão y*/}
                 <div className={s.progress}>
                     <span>00:00</span>
@@ -73,39 +71,43 @@ export function Player() {
                     </div>
                     <span>00:00</span>
                 </div>
-
-                {episode && ( // se usa '&&' pois este if não contém o senão (else), usa-se '||' para fazer ao contrário
+                {/* se usa '&&' pois este if não contém o senão (else), usa-se '||' para fazer ao contrário */}
+                {episode && ( 
                     <audio
                         src={episode.url}
                         ref={audioRef}
                         autoPlay
+                        onPlay={() => setPlayingState(true)}
+                        onPause={() => setPlayingState(false)}
                     />
-                )}
+                )}  
 
                 <div className={s.buttons}>
                     <button type="button" disabled={!episode}>
                         <img src="/shuffle.svg" alt="Embaralhar" />
                     </button>
+
                     <button type="button" disabled={!episode}>
                         <img src="/play-previous.svg" alt="Tocar anterior" />
                     </button>
+
                     <button type="button" className={s.playButton} disabled={!episode} onClick={togglePlay}>
                         { isPlaying 
                             ? <img src="/pause.svg" alt="Pause" />
                             : <img src="/play.svg" alt="Tocar" /> }
-
                     </button>
+
                     <button type="button" disabled={!episode}>
                         <img src="/play-next.svg" alt="Tocar próxima" />
                     </button>
+
                     <button type="button" disabled={!episode}>
                         <img src="/repeat.svg" alt="Repetir" />
                     </button>
                 </div>
             </footer>
-
         </div>
     );
-
 }
 
+// https://www.youtube.com/watch?v=cRs3jdGbOt0
