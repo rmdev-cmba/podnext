@@ -10,7 +10,8 @@ export default function Home(props) {
 };
 
 // SSG - Server Side Generation - Este recurso só funciona em produção (build)
-// nesta chamada a página é pré montada, já fica pronta esperando a chamada, muito utilizado em api's que não sofre alteração constante em seus dados.
+// nesta chamada as página são pré montada, já fica pronta esperando a chamada, muito utilizado em api's que não sofre alteração 
+// constante em seus dados, mas neste formato pode ser produzida muitas página na build o que não é bom.
 export async function getStaticProps() {
   const response = await fetch('http://localhost:3333/episodes')
   const data = await response.json()
@@ -24,3 +25,4 @@ export async function getStaticProps() {
 }
 
 
+// Video: [NLW#5] Trilha ReactJS – Aula 02 (1:10:00)

@@ -14,6 +14,7 @@ export default function Home() {
   )
 };
 
-// este modelo de chamada só carrega os dados no momento da chamada.
-// os hooks do React só pode ser usado dentro de componentes
+// Este modelo de chamada só carrega os dados no momento da chamada. No formato acima será carregado todas páginas de uma vez.
+// Os hooks do React só pode ser usado dentro de componentes
 
+// Video: [NLW#5] Trilha ReactJS – Aula 02 (1:10:00)
