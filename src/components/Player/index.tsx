@@ -13,7 +13,7 @@ export function Player() {
 
     // funcao useContext para fazer algo funcionar em varios componentes distintos
     const { episodeList, currentEpisodeIndex, isPlaying, togglePlay, setPlayingState } = useContext(PlayerContext)
-
+    
     // após ativado o audioRef será criado useEffet para ele fazer a mudança assim que algo mudar no audio
     useEffect(() => {
         if (!audioRef.current) { // os dados não fica em audioRef e sim em 'current' que vem do useRef do react
@@ -29,7 +29,7 @@ export function Player() {
 
     // buscando o episode que será tocado
     const episode = episodeList[currentEpisodeIndex]
-
+    
     return (
         <div className={s.container}>
             <header>

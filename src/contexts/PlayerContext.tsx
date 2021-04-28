@@ -35,14 +35,14 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
     const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0); // esta variável será repassado no objeto PlayerContext.Provider
     const [isPlaying, setIsPlaying] = useState(false);
 
-    function play(episode: Episode) {
-        setEpisodeList([episode]);
+    function play(episode: Episode) { // tipado como um objeto e não um array
+        setEpisodeList([episode]); // 'episode' aqui é um objeto que está sendo passado como array por isso dentro dos '[]'
         setCurrentEpisodeIndex(0);
         setIsPlaying(true);
     }
 
     function playList(list: Episode[], index: number) {
-        setEpisodeList([list]);
+        setEpisodeList(list); // 'list' aqui já é um array, não precisa colocar dentro de '[]'
         setCurrentEpisodeIndex(index);
         setIsPlaying(true);
     }

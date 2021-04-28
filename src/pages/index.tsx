@@ -30,17 +30,18 @@ type HomeProps = {
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
   // funcao useContext para fazer algo funcionar em varios componentes distintos
-  const { play } = useContext(PlayerContext);
+  const { playList } = useContext(PlayerContext)
   
-  const episodeList = [...latestEpisodes, ...allEpisodes] // principio da imutabilidade ([NLW 5] Trilha React - Aula 05 (00:19:00))
-
+  const episodesList = [...latestEpisodes, ...allEpisodes]; // princípio da imutabilidade ([NLW 5] Trilha React - Aula 05 (00:19:00))
+  
   return (
     <div className={s.homepage}>
       <section className={s.latestEpisodes}>
         <h2>Últimos Lançamentos </h2>
 
         <ul>
-          {latestEpisodes.map((episode) => { // o segundo parâmetro corresponde ao índice do array 
+          {latestEpisodes.map((episode, index) => { // o segundo parâmetro corresponde ao índice do array 
+          
             return (
               <li key={episode.id}>
                 <Image
@@ -59,7 +60,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   <span>{episode.durationAsString}</span>
                 </div>
 
-                <button type="button" onClick={() => play(episode)}> {/* uma função que contém parãmetros tem que ser chamada por outra função */}
+                <button type="button" onClick={() => playList(episodesList, index)}> {/* uma função que contém parãmetros tem que ser chamada por outra função */}
                   <img src="/play-green.svg" alt="Tocar episódio" />
                 </button>
               </li>
@@ -82,7 +83,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
             </tr>
           </thead>
           <tbody>
-            {allEpisodes.map((episode) => {
+            {allEpisodes.map((episode, index) => {
               return (
                 <tr key={episode.id}>
                   <td style={{ width: 72 }}>
@@ -94,16 +95,19 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                       objectFit="cover"
                     />
                   </td>
+
                   <td>
                     <Link href={`/episodes/${episode.id}`}>
                       <a>{episode.title}</a>
                     </Link>
                   </td>
+
                   <td>{episode.members}</td>
                   <td style={{ width: 100 }}>{episode.publishedAt}</td>
                   <td>{episode.durationAsString}</td>
+
                   <td>
-                    <button type="button" onClick={() => play(episode)}>
+                    <button type="button" onClick={() => playList(episodesList, index + latestEpisodes.length)}>
                       <img src="/play-green.svg" alt="Tocar episódio" />
                     </button>
                   </td>
