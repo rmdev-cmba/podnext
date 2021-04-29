@@ -16,14 +16,18 @@ type PlayerContextData = {
     episodeList: Episode[];
     currentEpisodeIndex: number; // índice para apontar em qual posição do array está tocando atualmente
     isPlaying: boolean;
+    isLooping: boolean;
+    isShuffling: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
     play: (episode: Episode) => void;
     setPlayingState: (state: boolean) => void;
     togglePlay: () => void;
+    toggleLoop: () => void;
     playList: (list: Episode[], index: number) => void;
     playNext: () => void;
     playPrevious: () => void;
+    toggleShuffle: () => void;
 }
 
 export const PlayerContext = createContext({} as PlayerContextData); // os parâmetros aqui não é o que será carregado aos componentes, mas informa com quais tipos de parâmetros será trablhado, recebidos
@@ -40,6 +44,7 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
     const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0); // esta variável será repassado no objeto PlayerContext.Provider
     const [isPlaying, setIsPlaying] = useState(false);
     const [isLooping, setIsLooping] = useState(false);
+    const [isShuffling, setIsShuffling] = useState(false);
 
     function play(episode: Episode) { // tipado como um objeto e não um array
         setEpisodeList([episode]); // 'episode' aqui é um objeto que está sendo passado como array por isso dentro dos '[]'
@@ -58,8 +63,14 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
         setIsPlaying(!isPlaying);
     }
 
+    // funcção repeat(loop)
     function toggleLoop() {
         setIsLooping(!isLooping);
+    }
+
+    // função shuffle
+    function toggleShuffle() {
+        setIsShuffling(!isShuffling);
     }
 
     // função para pause/play no teclado
@@ -91,7 +102,11 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
                 currentEpisodeIndex,
                 play,
                 isPlaying,
+                isLooping,
+                isShuffling,
                 togglePlay,
+                toggleLoop,
+                toggleShuffle,
                 setPlayingState,
                 playList,
                 playNext,

@@ -12,13 +12,15 @@ export function Player() {
     const audioRef = useRef<HTMLAudioElement>(null); // usa-se 'useRef' do react tipando com HTMLAudioElement com valor inicial null
 
     // funcao useContext para fazer algo funcionar em varios componentes distintos
-    const { episodeList, currentEpisodeIndex, isPlaying, hasNext, hasPrevious,
-        togglePlay, 
+    const { episodeList, currentEpisodeIndex, isPlaying, hasNext, hasPrevious, isLooping, isShuffling,
+        togglePlay,
+        toggleLoop,
+        toggleShuffle,
         setPlayingState,
         playNext,
         playPrevious
     } = usePlayer();
-    
+
     // após ativado o audioRef será criado useEffet para ele fazer a mudança assim que algo mudar no audio
     useEffect(() => {
         if (!audioRef.current) { // os dados não fica em audioRef e sim em 'current' que vem do useRef do react
@@ -27,14 +29,14 @@ export function Player() {
 
         if (isPlaying) {
             audioRef.current.play();
-        }else{
+        } else {
             audioRef.current.pause();
         }
     }, [isPlaying]); // toda vez que 'isPlaying' for alterado
 
     // buscando o episode que será tocado
     const episode = episodeList[currentEpisodeIndex]
-    
+
     return (
         <div className={s.container}>
             <header>
@@ -77,18 +79,23 @@ export function Player() {
                     <span>00:00</span>
                 </div>
                 {/* se usa '&&' pois este if não contém o senão (else), usa-se '||' para fazer ao contrário */}
-                {episode && ( 
+                {episode && (
                     <audio
                         src={episode.url}
                         ref={audioRef}
                         autoPlay
+                        loop={isLooping}
                         onPlay={() => setPlayingState(true)}
                         onPause={() => setPlayingState(false)}
                     />
-                )}  
+                )}
 
                 <div className={s.buttons}>
-                    <button type="button" disabled={!episode}>
+                    <button type="button"
+                        className={isShuffling ? s.isActive : ''}
+                        disabled={!episode || episodeList.length === 1} // só funciona se conter mais de 1 espisódio
+                        onClick={toggleShuffle}
+                    >
                         <img src="/shuffle.svg" alt="Embaralhar" />
                     </button>
 
@@ -97,16 +104,21 @@ export function Player() {
                     </button>
 
                     <button type="button" className={s.playButton} disabled={!episode} onClick={togglePlay}>
-                        { isPlaying 
+                        {isPlaying
                             ? <img src="/pause.svg" alt="Pause" />
-                            : <img src="/play.svg" alt="Tocar" /> }
+                            : <img src="/play.svg" alt="Tocar" />}
                     </button>
 
                     <button type="button" disabled={!episode || !hasNext} onClick={playNext}>
                         <img src="/play-next.svg" alt="Tocar próxima" />
                     </button>
 
-                    <button type="button" disabled={!episode}>
+                    <button
+                        type="button"
+                        disabled={!episode}
+                        onClick={toggleLoop}
+                        className={isLooping ? s.isActive : ''}
+                    >
                         <img src="/repeat.svg" alt="Repetir" />
                     </button>
                 </div>
@@ -116,3 +128,5 @@ export function Player() {
 }
 
 // https://www.youtube.com/watch?v=cRs3jdGbOt0
+
+// TODO: Implantacao do shuffle [NLW 5] Trilha React - Aula 05 (00:42:00)

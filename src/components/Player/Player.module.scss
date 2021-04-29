@@ -1,5 +1,8 @@
+// '&.' siginifica se estiver usando esta classe..
+// '&:' se estiver no estado de (disabled, hover...)
+
 .container {
-    padding:  3rem 4rem;
+    padding: 3rem 4rem;
     width: 26.5rem;
     height: 100vh;
 
@@ -25,12 +28,12 @@
     footer {
         align-self: stretch; // ocupa a largura toda do footer
 
-        &.empty .progress { // aplicado somente no '.progress'
+        &.empty .progress {
+            // aplicado somente no '.progress'
             // quando conter a estilização 'empty'
             opacity: 0.5;
         }
     }
-    
 }
 
 .currentEpisode {
@@ -48,7 +51,7 @@
     }
 
     span {
-        display: block;                             
+        display: block;
         margin-top: 1rem;
         opacity: 0.6;
         line-height: 1.5rem;
@@ -69,7 +72,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
 }
 
 .progress {
@@ -77,7 +79,7 @@
     align-items: center;
     gap: 1rem;
     font-size: 0.875;
-    
+
     span {
         display: inline-block;
         width: 4rem;
@@ -94,7 +96,6 @@
             border-radius: 2px;
         }
     }
-
 }
 
 .buttons {
@@ -111,17 +112,30 @@
 
         transition: filter 0.2s;
 
+        // '&:' quando estiver desabilitado...
         &:disabled {
             // cursor: not-allowed; // não permite o cursor
             cursor: default;
             opacity: 0.5;
         }
 
-
+        // '&:' quando passar o mouse E NÃO estiver desabilitado...
         &:hover:not(:disabled) {
-            filter: brightness(0.70)
+            filter: brightness(0.7);
         }
+        
+        // classe para botão repeat(loop) / [NLW 5] Trilha React - Aula 05 (00:37:00)
+            // caso o botão esteja habilitado a usar a classe 'isActive'
+        &.isActive {
+            filter: invert(0.35) sepia(1) saturate(3) hue-rotate(100deg); // ao ativar o repeat ficará na cor verde
 
+        }
+            // após ativado e ao passar o mouse:
+        &.isActive:hover {
+            filter:brightness(0.6) invert(0.35) sepia(1) saturate(3) hue-rotate(100deg);
+        } 
+        
+        // se estiver usando esta classe
         &.playButton {
             // se contém 'playButton'
             width: 4rem;
@@ -129,10 +143,10 @@
             border-radius: 1rem;
             background: var(--purple-400);
 
+            // quando passar o mouse E NÃO estiver desabilitado...
             &:hover:not(:disabled) {
-                filter: brightness(0.95)
+                filter: brightness(0.95);
             }
-
         }
     }
 }
