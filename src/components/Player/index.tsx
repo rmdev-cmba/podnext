@@ -1,15 +1,18 @@
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // importacao do pacote slider para gerar a barra de indicação tempo no player
 import Slider from 'rc-slider';
 // importando o css próprio do rc-slider
 import 'rc-slider/assets/index.css';
 import s from './Player.module.scss';
 import { usePlayer } from './../../contexts/PlayerContext';
+import { convertDurationToTimeString } from './../../utils/convertDurationToTimeString';
 
 export function Player() {
     // criando uma referencia para controlar a tag audio do html
     const audioRef = useRef<HTMLAudioElement>(null); // usa-se 'useRef' do react tipando com HTMLAudioElement com valor inicial null
+
+    const [progress, setProgress] = useState(0); // Memória para guardar dados da 'barra de progresso' (Slider) ref tempo do áudio
 
     // funcao useContext para fazer algo funcionar em varios componentes distintos
     const { episodeList, currentEpisodeIndex, isPlaying, hasNext, hasPrevious, isLooping, isShuffling,
@@ -18,7 +21,8 @@ export function Player() {
         toggleShuffle,
         setPlayingState,
         playNext,
-        playPrevious
+        playPrevious,
+        clearPlayerState,
     } = usePlayer();
 
     // após ativado o audioRef será criado useEffet para ele fazer a mudança assim que algo mudar no audio
@@ -34,6 +38,27 @@ export function Player() {
         }
     }, [isPlaying]); // toda vez que 'isPlaying' for alterado
 
+    // função para monitorar o tempo do áudio
+    function setupProgresssListener() {
+        audioRef.current.currentTime = 0; // zera o tempo toda vez que é chamado um novo áudio
+
+        audioRef.current.addEventListener('timeupdate', () => {
+            setProgress(Math.floor(audioRef.current.currentTime)); // faz o arredondamento
+        })
+    }
+
+    function handleSeek(amount: number) {
+        audioRef.current.currentTime = amount; // altera o ponto do áudio
+        setProgress(amount); // altera o ponto da barra(Slider)
+    }
+
+    function episodeEnded(){
+        if (hasNext) {
+            playNext()
+        }else{
+            clearPlayerState()
+        }
+    }
     // buscando o episode que será tocado
     const episode = episodeList[currentEpisodeIndex]
 
@@ -64,10 +89,13 @@ export function Player() {
 
             <footer className={!episode ? s.empty : ''}> {/* '!episode ? x ; y' se não houver episódio então x senão y*/}
                 <div className={s.progress}>
-                    <span>00:00</span>
+                    <span>{convertDurationToTimeString(progress)}</span>
                     <div className={s.slider}>
                         {episode ? (
                             <Slider
+                                max={episode.duration} // max em segundos
+                                value={progress}
+                                onChange={handleSeek} // chama a função levando o parâmetro internamente e muda a barra manualmente
                                 trackStyle={{ backgroundColor: '#04d361' }}
                                 railStyle={{ backgroundColor: '#9f75ff' }}
                                 handleStyle={{ borderColor: '#04d361', borderWidth: 4 }}
@@ -76,7 +104,7 @@ export function Player() {
                             <div className={s.emptySlider} />
                         )}
                     </div>
-                    <span>00:00</span>
+                    <span>{convertDurationToTimeString(episode?.duration ?? 0)}</span>
                 </div>
                 {/* se usa '&&' pois este if não contém o senão (else), usa-se '||' para fazer ao contrário */}
                 {episode && (
@@ -84,9 +112,11 @@ export function Player() {
                         src={episode.url}
                         ref={audioRef}
                         autoPlay
-                        loop={isLooping}
+                        onEnded={episodeEnded} //quando o áudio chega no final e repeat não estiver ativado
+                        loop={isLooping} // função repeat
                         onPlay={() => setPlayingState(true)}
                         onPause={() => setPlayingState(false)}
+                        onLoadedData={setupProgresssListener} // esse método dispara assim que carregar os dados do episódio
                     />
                 )}
 

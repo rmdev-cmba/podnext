@@ -28,6 +28,7 @@ type PlayerContextData = {
     playNext: () => void;
     playPrevious: () => void;
     toggleShuffle: () => void;
+    clearPlayerState: () => void;
 }
 
 export const PlayerContext = createContext({} as PlayerContextData); // os parâmetros aqui não é o que será carregado aos componentes, mas informa com quais tipos de parâmetros será trablhado, recebidos
@@ -77,21 +78,31 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
     function setPlayingState(state: boolean) {
         setIsPlaying(state);
     }
-    const hasPrevious = currentEpisodeIndex > 0;
-    const hasNext = currentEpisodeIndex + 1 < episodeList.length;
+
+    // limpa o play
+    function clearPlayerState() {
+        setEpisodeList([]);
+        setCurrentEpisodeIndex(0);
+    }
+
+    const hasPrevious = currentEpisodeIndex > 0; // condição para retornar ao áudio anterior
+    const hasNext = isShuffling || currentEpisodeIndex + 1 < episodeList.length; // condição para permitir próximo áudio
 
     // próximo podcast
     function playNext() {
-        if (hasNext){ // array é iniciado em 0 e length em 1
+        if (isShuffling) {
+            const nextRandomEpisodeIndex = Math.floor(Math.random() * episodeList.length)
+            setCurrentEpisodeIndex(nextRandomEpisodeIndex);
+        }
+        else if (hasNext) { // array é iniciado em 0 e length em 1
             setCurrentEpisodeIndex(currentEpisodeIndex + 1);
         }
-        return;  
     }
 
     // podcast anterior
     function playPrevious() {
-        if (hasPrevious){ // só haverá retorno se estiver tocando a posição 1 em diante
-        setCurrentEpisodeIndex(currentEpisodeIndex - 1);
+        if (hasPrevious) { // só haverá retorno se estiver tocando a posição 1 em diante
+            setCurrentEpisodeIndex(currentEpisodeIndex - 1);
         }
     }
 
@@ -100,10 +111,11 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
             value={{
                 episodeList,
                 currentEpisodeIndex,
-                play,
                 isPlaying,
                 isLooping,
                 isShuffling,
+                clearPlayerState,
+                play,
                 togglePlay,
                 toggleLoop,
                 toggleShuffle,

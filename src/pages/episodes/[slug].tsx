@@ -3,6 +3,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import Head from 'next/head';
 import Link from 'next/link';
 import { api } from '../../service/api';
 import { convertDurationToTimeString } from '../../utils/convertDurationToTimeString';
@@ -41,6 +42,9 @@ export default function Episode({ episode }: EpisodeProps) {
 
     return (
         <div className={s.episode}>
+            <Head>
+                <title>{episode.title} | Podcastr</title>
+            </Head>
             <div className={s.thumbnailContainer}>
                 <Link href="/">
                     <button type="button">
@@ -132,7 +136,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
             episode,
         },
         revalidate: 60 * 60 * 24, // 24 hours, após este tempo todas ás paginas estáticas produzidas no build ou depois serão atualizadas automaticamente,
-                                  // não atualiza antes
+        // não atualiza antes
     }
 }
 
