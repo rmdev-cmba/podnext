@@ -1,15 +1,14 @@
-import { useContext } from 'react';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { PlayerContext } from '../contexts/PlayerContext';
+import { usePlayer } from './../contexts/PlayerContext';
 import { api } from '../service/api';
 import { format, parseISO } from 'date-fns';
 // parseISO converte uma 'string data' na data correspondente
 import ptBR from 'date-fns/locale/pt-BR';
 import { convertDurationToTimeString } from './../utils/convertDurationToTimeString';
-import s from './home.module.scss';
 import Episode from './episodes/[slug]';
+import s from './home.module.scss';
 
 type Episode = {
   id: string;
@@ -30,7 +29,7 @@ type HomeProps = {
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
   // funcao useContext para fazer algo funcionar em varios componentes distintos
-  const { playList } = useContext(PlayerContext)
+  const { playList } = usePlayer();
   
   const episodesList = [...latestEpisodes, ...allEpisodes]; // princípio da imutabilidade ([NLW 5] Trilha React - Aula 05 (00:19:00))
   

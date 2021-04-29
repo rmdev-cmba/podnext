@@ -6,8 +6,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { api } from '../../service/api';
 import { convertDurationToTimeString } from '../../utils/convertDurationToTimeString';
-
+import { usePlayer } from '../../contexts/PlayerContext';
 import s from './episode.module.scss';
+
+// Este arquivo '[slug]' é responsável pela apresentação de um único podcast
+// Aqui é implantado a função 'play'
 
 type Episode = {
     id: string;
@@ -26,6 +29,8 @@ type EpisodeProps = {
 };
 
 export default function Episode({ episode }: EpisodeProps) {
+    // importando o 'PlayerContext'
+    const { play } = usePlayer();
 
     // código que serve somente se o 'fallback' for true
     const router = useRouter();
@@ -49,7 +54,7 @@ export default function Episode({ episode }: EpisodeProps) {
                     src={episode.thumbnail}
                     objectFit="cover"
                 />
-                <button type="button">
+                <button type="button" onClick={() => play(episode)}>
                     <img src="/play.svg" alt="Tocar episódio" />
                 </button>
             </div>
@@ -86,7 +91,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
             _sort: 'published_at',
             _order: 'desc'
         }
-    })  // busca todos os dados disponibilizado em '_limit'
+    })  // busca todos os dados disponibilizado em '_limit', neste caso apenas 2
 
     const paths = data.map(episode => {
         return {

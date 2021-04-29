@@ -1,18 +1,23 @@
 import Image from 'next/image';
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 // importacao do pacote slider para gerar a barra de indicação tempo no player
 import Slider from 'rc-slider';
 // importando o css próprio do rc-slider
 import 'rc-slider/assets/index.css';
-import { PlayerContext } from '../../contexts/PlayerContext';
 import s from './Player.module.scss';
+import { usePlayer } from './../../contexts/PlayerContext';
 
 export function Player() {
     // criando uma referencia para controlar a tag audio do html
     const audioRef = useRef<HTMLAudioElement>(null); // usa-se 'useRef' do react tipando com HTMLAudioElement com valor inicial null
 
     // funcao useContext para fazer algo funcionar em varios componentes distintos
-    const { episodeList, currentEpisodeIndex, isPlaying, togglePlay, setPlayingState } = useContext(PlayerContext)
+    const { episodeList, currentEpisodeIndex, isPlaying, hasNext, hasPrevious,
+        togglePlay, 
+        setPlayingState,
+        playNext,
+        playPrevious
+    } = usePlayer();
     
     // após ativado o audioRef será criado useEffet para ele fazer a mudança assim que algo mudar no audio
     useEffect(() => {
@@ -87,7 +92,7 @@ export function Player() {
                         <img src="/shuffle.svg" alt="Embaralhar" />
                     </button>
 
-                    <button type="button" disabled={!episode}>
+                    <button type="button" disabled={!episode || !hasPrevious} onClick={playPrevious}>
                         <img src="/play-previous.svg" alt="Tocar anterior" />
                     </button>
 
@@ -97,7 +102,7 @@ export function Player() {
                             : <img src="/play.svg" alt="Tocar" /> }
                     </button>
 
-                    <button type="button" disabled={!episode}>
+                    <button type="button" disabled={!episode || !hasNext} onClick={playNext}>
                         <img src="/play-next.svg" alt="Tocar próxima" />
                     </button>
 

@@ -1,9 +1,10 @@
-import { createContext, ReactNode, useState } from 'react';
+import { createContext, ReactNode, useState, useContext } from 'react';
+
 
 
 // tipando o objeto que será carregado PlayerContext
 type Episode = {
-    // aqui será tipado apenas o será mostrado durante o play
+    // aqui será tipado apenas o que será mostrado durante o play
     title: string;
     members: string;
     thumbnail: string;
@@ -15,10 +16,14 @@ type PlayerContextData = {
     episodeList: Episode[];
     currentEpisodeIndex: number; // índice para apontar em qual posição do array está tocando atualmente
     isPlaying: boolean;
+    hasNext: boolean;
+    hasPrevious: boolean;
     play: (episode: Episode) => void;
     setPlayingState: (state: boolean) => void;
     togglePlay: () => void;
     playList: (list: Episode[], index: number) => void;
+    playNext: () => void;
+    playPrevious: () => void;
 }
 
 export const PlayerContext = createContext({} as PlayerContextData); // os parâmetros aqui não é o que será carregado aos componentes, mas informa com quais tipos de parâmetros será trablhado, recebidos
@@ -34,6 +39,7 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
     const [episodeList, setEpisodeList] = useState([]); // esta variável será repassado no objeto PlayerContext.Provider
     const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0); // esta variável será repassado no objeto PlayerContext.Provider
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isLooping, setIsLooping] = useState(false);
 
     function play(episode: Episode) { // tipado como um objeto e não um array
         setEpisodeList([episode]); // 'episode' aqui é um objeto que está sendo passado como array por isso dentro dos '[]'
@@ -52,9 +58,30 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
         setIsPlaying(!isPlaying);
     }
 
+    function toggleLoop() {
+        setIsLooping(!isLooping);
+    }
+
     // função para pause/play no teclado
     function setPlayingState(state: boolean) {
         setIsPlaying(state);
+    }
+    const hasPrevious = currentEpisodeIndex > 0;
+    const hasNext = currentEpisodeIndex + 1 < episodeList.length;
+
+    // próximo podcast
+    function playNext() {
+        if (hasNext){ // array é iniciado em 0 e length em 1
+            setCurrentEpisodeIndex(currentEpisodeIndex + 1);
+        }
+        return;  
+    }
+
+    // podcast anterior
+    function playPrevious() {
+        if (hasPrevious){ // só haverá retorno se estiver tocando a posição 1 em diante
+        setCurrentEpisodeIndex(currentEpisodeIndex - 1);
+        }
     }
 
     return (
@@ -67,10 +94,18 @@ export function PlayerContextProvider({ children }: PlayerContextProviderProps) 
                 togglePlay,
                 setPlayingState,
                 playList,
+                playNext,
+                playPrevious,
+                hasNext,
+                hasPrevious
             }}
         >
             {children}
         </PlayerContext.Provider>
     )
+}
+
+export const usePlayer = () => {
+    return useContext(PlayerContext);
 }
 
