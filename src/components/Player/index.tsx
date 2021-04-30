@@ -157,6 +157,5 @@ export function Player() {
     );
 }
 
-// https://www.youtube.com/watch?v=cRs3jdGbOt0
 
-// TODO: Implantacao do shuffle [NLW 5] Trilha React - Aula 05 (00:42:00)
+

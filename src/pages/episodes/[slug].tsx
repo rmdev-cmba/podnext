@@ -141,4 +141,3 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 }
 
 
-// https://www.youtube.com/watch?v=cRs3jdGbOt0 (24:00)
